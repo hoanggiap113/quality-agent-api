@@ -1,0 +1,240 @@
+{
+  "version": "1.0.0",
+  "darkMode": true,
+  "gridEnabling": false,
+  "detailLevel": "All",
+  "tablePositions": [
+    {
+      "name": "users",
+      "schemaName": "public",
+      "x": 485.0576272029348,
+      "y": 48.06469440631294
+    },
+    {
+      "name": "channels",
+      "schemaName": "public",
+      "x": -37.942524247922734,
+      "y": 479.60701563224194
+    },
+    {
+      "name": "conversations",
+      "schemaName": "public",
+      "x": -843.9944134632982,
+      "y": 338.09949853325827
+    },
+    {
+      "name": "messages",
+      "schemaName": "public",
+      "x": -459.88844514078716,
+      "y": 693.9973051588495
+    },
+    {
+      "name": "ai_settings",
+      "schemaName": "public",
+      "x": -54.44092810547994,
+      "y": 13.66539835037186
+    },
+    {
+      "name": "conversation_scores",
+      "schemaName": "public",
+      "x": -562.2855891133213,
+      "y": -116.76952388320909
+    },
+    {
+      "name": "conversation_score_details",
+      "schemaName": "public",
+      "x": -933.1270940895544,
+      "y": -103.04399396349702
+    },
+    {
+      "name": "system_logs",
+      "schemaName": "public",
+      "x": -1192.2520224203984,
+      "y": 800.4662139878096
+    }
+  ],
+  "tableGroupCollapseStates": [],
+  "stickyNoteLayouts": [],
+  "referencePaths": [
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "users",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "created_by"
+      ],
+      "secondTableName": "channels",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "channels",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "channel_id"
+      ],
+      "secondTableName": "conversations",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "users",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "assigned_staff_id"
+      ],
+      "secondTableName": "conversations",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "conversations",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "conversation_id"
+      ],
+      "secondTableName": "messages",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "channels",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "channel_id"
+      ],
+      "secondTableName": "messages",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "channels",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "channel_id"
+      ],
+      "secondTableName": "ai_settings",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "users",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "created_by"
+      ],
+      "secondTableName": "ai_settings",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "conversations",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "conversation_id"
+      ],
+      "secondTableName": "conversation_scores",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "ai_settings",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "ai_setting_id"
+      ],
+      "secondTableName": "conversation_scores",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "conversation_scores",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "conversation_score_id"
+      ],
+      "secondTableName": "conversation_score_details",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "channels",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "channel_id"
+      ],
+      "secondTableName": "system_logs",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    },
+    {
+      "firstFieldNames": [
+        "id"
+      ],
+      "firstTableName": "conversations",
+      "firstSchemaName": "public",
+      "firstRelation": "1",
+      "secondFieldNames": [
+        "conversation_id"
+      ],
+      "secondTableName": "system_logs",
+      "secondSchemaName": "public",
+      "secondRelation": "*",
+      "checkPoints": []
+    }
+  ]
+}

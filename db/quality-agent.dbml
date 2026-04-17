@@ -1,0 +1,233 @@
+Enum user_role {
+  ADMIN
+  MANAGER
+  STAFF
+}
+
+Enum channel_type {
+  ZALO_OA
+  FACEBOOK
+}
+
+Enum channel_status {
+  ACTIVE
+  INACTIVE
+  ERROR
+}
+
+Enum sync_status {
+  IDLE
+  SYNCING
+  SUCCESS
+  FAILED
+}
+
+Enum conversation_status {
+  OPEN
+  PENDING
+  CLOSED
+}
+
+Enum sender_type {
+  CUSTOMER
+  STAFF
+  BOT
+  SYSTEM
+}
+
+Enum score_status {
+  PENDING
+  PROCESSING
+  DONE
+  FAILED
+}
+
+Enum log_level {
+  INFO
+  WARN
+  ERROR
+}
+
+Enum conversation_category {
+  COMPLAINT
+  CONSULTATION
+  ORDER_SUPPORT
+  AFTER_SALES
+  GENERAL_INQUIRY
+  SPAM
+}
+
+Enum score_category {
+  RESPONSE_TIME
+  TONE_LANGUAGE
+  RESOLUTION
+  ACCURACY
+  PROFESSIONALISM
+  EMPATHY
+  ESCALATION_NEEDED
+  POSITIVE
+}
+
+Table users {
+  id uuid [pk, default: `gen_random_uuid()`]
+  email text [not null, unique]
+  name text
+  password text [not null]
+  role user_role [not null, default: 'STAFF']
+  is_verified boolean [not null, default: false]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+}
+
+Table channels {
+  id uuid [pk, default: `gen_random_uuid()`]
+  name text [not null]
+  type channel_type [not null]
+
+  status channel_status [not null, default: 'ACTIVE']
+  sync_status sync_status [not null, default: 'IDLE']
+
+  external_channel_id text
+  app_id text
+  verify_token text
+  access_token text
+  refresh_token text
+  webhook_url text
+
+  sync_cursor text
+  sync_interval_min int [not null, default: 15]
+  save_media boolean [not null, default: false]
+
+  total_conversations int [not null, default: 0]
+
+  last_sync_at timestamp
+  last_webhook_at timestamp
+  last_error text
+
+  created_by uuid [ref: > users.id]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+
+  Indexes {
+    (type)
+    (status)
+    (sync_status)
+    (external_channel_id)
+  }
+}
+
+Table conversations {
+  id uuid [pk, default: `gen_random_uuid()`]
+  channel_id text [not null, ref: > channels.id]
+  external_conv_id text [not null]
+  customer_id text
+  customer_name text
+  category conversation_category
+  assigned_staff_id uuid [ref: > users.id]
+  status conversation_status [not null, default: 'OPEN']
+  started_at timestamp
+  ended_at timestamp
+  last_message_at timestamp
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+
+  Indexes {
+    (channel_id)
+    (channel_id, external_conv_id) [unique]
+    (status)
+    (customer_id)
+    (assigned_staff_id)
+    (last_message_at)
+  }
+}
+
+Table messages {
+  id uuid [pk, default: `gen_random_uuid()`]
+  conversation_id uuid [not null, ref: > conversations.id]
+  channel_id text [not null, ref: > channels.id]
+  external_message_id text [not null]
+  sender_id text
+  recipient_id text
+  sender_type sender_type [not null]
+  content jsonb [not null]
+  timestamp bigint
+  created_at timestamp [not null, default: `now()`]
+
+  Indexes {
+    (conversation_id)
+    (channel_id)
+    (timestamp)
+    (channel_id, external_message_id) [unique]
+  }
+}
+
+Table ai_settings {
+  id uuid [pk, default: `gen_random_uuid()`]
+  channel_id text [ref: > channels.id]
+  created_by uuid [not null, ref: > users.id]
+  model text [not null, default: 'claude-sonnet-4-6']
+  prompt_template text [not null]
+  score_threshold int [not null, default: 6]
+  alert_telegram boolean [not null, default: false]
+  alert_email boolean [not null, default: false]
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+
+  Indexes {
+    (channel_id)
+    (created_by)
+  }
+}
+
+Table conversation_scores {
+  id uuid [pk, default: `gen_random_uuid()`]
+  conversation_id uuid [not null, ref: > conversations.id]
+  ai_setting_id uuid [not null, ref: > ai_settings.id]
+  total_score int
+  status score_status [not null, default: 'PENDING']
+  error_message text
+  retry_count int [not null, default: 0]
+  scored_at timestamp
+  created_at timestamp [not null, default: `now()`]
+  updated_at timestamp [not null, default: `now()`]
+
+  Indexes {
+    (conversation_id)
+    (ai_setting_id)
+    (status)
+    (created_at)
+  }
+}
+
+Table conversation_score_details {
+  id uuid [pk, default: `gen_random_uuid()`]
+  conversation_score_id uuid [not null, ref: > conversation_scores.id]
+  category score_category [not null]
+  score int
+  reason text
+  created_at timestamp [not null, default: `now()`]
+
+  Indexes {
+    (conversation_score_id)
+    (category)
+  }
+}
+
+Table system_logs {
+  id uuid [pk, default: `gen_random_uuid()`]
+  level log_level [not null]
+  service text [not null]
+  action text [not null]
+  channel_id text [ref: > channels.id]
+  conversation_id uuid [ref: > conversations.id]
+  payload jsonb
+  error text
+  created_at timestamp [not null, default: `now()`]
+
+  Indexes {
+    (service, created_at)
+    (level, created_at)
+    (channel_id, created_at)
+    (conversation_id, created_at)
+  }
+}

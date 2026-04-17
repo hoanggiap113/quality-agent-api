@@ -1,0 +1,10 @@
+http:
+  host: 'localhost'
+  port: 8080
+
+db:
+  postgres:
+    url: '10.116.16.80'
+    port: 5466
+    database: 'chat-quality-agent'
+
